@@ -18,6 +18,9 @@ const MultiStepForm = () => {
     const [allEmails, setAllEmails] = useState<string[]>([]);
     const [step, setStep] = useState(1);
     const [emailError, setEmailError] = useState('')
+    const [phoneError, setPhoneError] = useState('')
+    const [isLoading, setIsLoading] = useState(false);
+    const [isFormVisible, setIsFormVisible] = useState(true);
     const [formData, setFormData] = useState({
         email: '',
         password: '',
@@ -37,7 +40,9 @@ const MultiStepForm = () => {
 
     const handleSubmit = async (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        if (!usernameError) {
+        if (!usernameError && !emailError && !phoneError) {
+            setIsLoading(true);
+            setIsFormVisible(false);
             try {
                 const response = await fetch('/api/userData', {
                     method: 'POST',
@@ -51,8 +56,7 @@ const MultiStepForm = () => {
                     console.log('User Added')
                     toast.success('User Added successfully!', { position: toast.POSITION.TOP_CENTER });
                     setFormData(formInitialState)
-                    const data = await response.json()
-                    window.location.href = '/'
+                    setStep(1)
                 }
                 else {
                     console.log('User was not added')
@@ -61,6 +65,8 @@ const MultiStepForm = () => {
             catch (error) {
                 console.log("Error:", error)
             }
+            setIsLoading(false);
+            setIsFormVisible(true);
         }
         else {
             console.log('Please enter a valid username')
@@ -113,6 +119,17 @@ const MultiStepForm = () => {
         }
     }
 
+    const checkValidPhone = (phone: string) => {
+        if (phone.length !== 10 || isNaN(Number(phone))) {
+            setPhoneError('Invalid Phone Number')
+            return false
+        }
+        else {
+            setPhoneError('')
+            return true
+        }
+    }
+
     const handleChange = (event: { target: { name: any; value: any } }) => {
         if (event.target.name === 'email') {
             if (!checkValidEmail(event.target.value)) {
@@ -130,6 +147,14 @@ const MultiStepForm = () => {
                 setusernameError('')
             }
         }
+        else if(event.target.name === 'phone'){
+            if(!checkValidPhone(event.target.value)){
+                setPhoneError('Invalid Phone Number')
+            }
+            else{
+                setPhoneError('')
+            }
+        }
         setFormData((prevData) => ({ ...prevData, [event.target.name]: event.target.value }));
     }
 
@@ -141,7 +166,7 @@ const MultiStepForm = () => {
     return (
         <Fragment>
             <h1 className='mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 text-center mt-4'>Create Account</h1>
-            <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
+            {isFormVisible && (<div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-md shadow-md">
                 {step === 1 && (
                     <form onSubmit={nextStep} method='POST'>
                         <label className="block mb-2">Email:</label>
@@ -203,9 +228,12 @@ const MultiStepForm = () => {
                             name="phone"
                             value={formData.phone}
                             onChange={handleChange}
-                            className="w-full p-2 mb-4 border rounded-md"
+                            className="w-full p-2 mb-2 border rounded-md"
                             required
                         />
+                        {phoneError && (
+                            <p className="text-red-500 text-sm mb-4">{phoneError}</p>
+                        )}
                         <div className="flex justify-between">
                             <button
                                 type="button"
@@ -224,6 +252,32 @@ const MultiStepForm = () => {
                     </form>
                 )}
             </div>
+            )}
+            {isLoading && (
+                <div className='items-center text-center justify-center'>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        className="w-16 h-16 animate-spin m-auto"
+                    >
+                        <circle
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            strokeWidth="2"
+                            className="opacity-25"
+                        ></circle>
+                        <path
+                            d="M12 2a10 10 0 0 0-10 10 10 10 0 0 0 10 10 10 10 0 0 0 10-10"
+                            strokeLinecap="round"
+                            strokeWidth="2"
+                            className="opacity-75"
+                        ></path>
+                    </svg>
+                </div>
+            )}
         </Fragment>
     );
 };

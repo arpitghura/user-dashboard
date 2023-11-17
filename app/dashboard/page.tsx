@@ -84,7 +84,7 @@ const DataTable = () => {
 
     return (
         <>
-            <div className='flex flex-col align-center justify-center w-11/12 p-5 m-auto'>
+            <div className='flex flex-col align-center justify-center w-11/12 h-full p-5 m-auto'>
                 <h2 className='mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-900'>
                     Search User Data
                 </h2>
@@ -98,7 +98,7 @@ const DataTable = () => {
                 <h2 className='mb-4 text-3xl font-extrabold leading-none tracking-tight text-gray-900 '>
                     {searchQuery ? "Search Results" : "All Users Data"}
                 </h2>
-                <table className="table text-md w-full h-100 overflow-y-auto text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                <table className="table text-md w-full h-100 overflow-y-scroll overflow-x-scroll text-left rtl:text-right text-gray-500 dark:text-gray-400">
                     <thead className="text-sm text-gray-700 uppercase bg-gray-100 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th scope="col" className="px-6 py-3">
