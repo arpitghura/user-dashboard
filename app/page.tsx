@@ -1,5 +1,7 @@
+import DataTable from "@/app/dashboard/page";
+
 export default function Home() {
   return (
-    <h1>User Management Dashboard</h1>
+    <DataTable />
   )
 }
