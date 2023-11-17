@@ -3,14 +3,12 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
     const query = request.nextUrl.searchParams.get('query');
-    // Replace the uri string with your connection string.
-    const uri = "mongodb+srv://mongodb:uHAsdrvqPZHOjGIg@cluster0.zjmhiiq.mongodb.net/";
+    const uri = process.env.MONGO_URI;
     const client = new MongoClient(uri);
 
     try {
-        const database = client.db('arpit');
-        const inventory = database.collection('inventory');
-
+        const database = client.db(process.env.DB_USER);
+        const inventory = database.collection(process.env.DB_COLLECTION);
         const userData = await inventory.aggregate([
             {
               $match: {
@@ -25,7 +23,6 @@ export async function GET(request) {
           ]).toArray();
         return NextResponse.json({ success: true, userData });
     } finally {
-        // Ensures that the client will close when you finish/error
         await client.close();
     }
 }
