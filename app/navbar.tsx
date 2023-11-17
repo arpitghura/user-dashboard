@@ -4,7 +4,7 @@ import React from 'react'
 const Navbar = () => {
     return (
         <header className="text-gray-600 body-font bg-slate-100">
-            <div className="container mx-auto flex h-[10vh] flex-wrap px-5 flex-col md:flex-row items-center">
+            <div className="container mx-auto flex flex-wrap px-5 flex-col md:flex-row items-center">
                 <Link className="flex title-font font-medium items-center text-gray-900 md:mb-0" href="/">
                     <span className="ml-3 text-xl font-bold leading-none tracking-normal">User Management Dashboard</span>
                 </Link>
