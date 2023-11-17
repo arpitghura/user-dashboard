@@ -84,7 +84,7 @@ const DataTable = () => {
 
     return (
         <>
-            <div className='flex flex-col align-center justify-center w-11/12 h-full p-5 m-auto'>
+            <div className='flex flex-col w-11/12 h-full p-5 m-auto'>
                 <h2 className='mb-4 text-xl font-extrabold leading-none tracking-tight text-gray-900'>
                     Search User Data
                 </h2>
